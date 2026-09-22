@@ -44,9 +44,9 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // Nanoparticle canvas background: glowing orange/gold specks drift in
-// scattered, converge into a folded two-lobe brain shape by the middle
-// of the page, flash once when fully assembled, then fly apart again
-// as you scroll into the back half of the page.
+// scattered, converge into a recognizable side-profile brain silhouette
+// by the middle of the page, flash once when fully assembled, then fly
+// apart again as you scroll into the back half of the page.
 function initNeuralBackground() {
   var canvas = document.getElementById('neuralBg');
   if (!canvas || !canvas.getContext) return;
@@ -55,11 +55,22 @@ function initNeuralBackground() {
   var animate = !reducedMotion;
 
   var DPR = Math.min(window.devicePixelRatio || 1, 1.5);
-  var width, height, cx, cy, baseR, linkDist;
+  var width, height, cx, cy, baseR, linkDist, brainPath;
   var particles = [], edges = [], pulses = [];
   var visible = true;
 
   var PALETTE = ['247,197,72', '242,101,12', '255,150,64', '221,43,30'];
+
+  // Anatomical anchor points for a side-profile brain silhouette —
+  // frontal lobe front-right, occipital lobe + cerebellum + a short
+  // brainstem stub at back-left, temporal lobe bulge underneath the
+  // front. Normalized around (0,0) with radius ~1; y grows downward.
+  var BRAIN_ANCHORS = [
+    [0.62, -0.62], [0.30, -0.88], [-0.10, -0.95], [-0.50, -0.80],
+    [-0.78, -0.45], [-0.82, -0.05], [-0.68, 0.22], [-0.48, 0.38],
+    [-0.30, 0.40], [-0.22, 0.64], [-0.12, 0.40], [0.05, 0.38],
+    [0.32, 0.58], [0.55, 0.42], [0.68, 0.05], [0.66, -0.30]
+  ];
 
   function rand(min, max) { return min + Math.random() * (max - min); }
   function lerp(a, b, t) { return a + (b - a) * t; }
@@ -72,41 +83,34 @@ function initNeuralBackground() {
     return progress <= 0.5 ? progress / 0.5 : (1 - progress) / 0.5;
   }
 
-  // Wobbly lobe radius so the silhouette reads as folded brain matter
-  // rather than a plain circle. Coefficients are fixed per lobe seed so
-  // the shape stays put across frames.
-  function lobeFactor(theta, seed) {
-    return 1
-      + 0.16 * Math.sin(4 * theta + seed)
-      + 0.10 * Math.sin(7 * theta + seed * 1.7)
-      + 0.06 * Math.sin(11 * theta + seed * 2.3);
-  }
-
-  function lobes() {
-    return [
-      { x: cx - baseR * 0.5, y: cy, seed: 1.3 },
-      { x: cx + baseR * 0.5, y: cy, seed: 4.1 }
-    ];
-  }
-
-  function insideBrain(px, py) {
-    var ls = lobes();
-    for (var i = 0; i < ls.length; i++) {
-      var l = ls[i];
-      var dx = px - l.x, dy = (py - l.y) * 1.15;
-      var dist = Math.sqrt(dx * dx + dy * dy);
-      var theta = Math.atan2(dy, dx);
-      var r = baseR * 0.6 * lobeFactor(theta, l.seed);
-      if (dist < r) return true;
+  // Smooth closed Catmull-Rom spline through the anchor points, built
+  // as a Path2D so we can both fill-test particle placement against it
+  // and stroke its outline once the brain is mostly assembled.
+  function buildBrainPath(scale, offX, offY) {
+    var pts = BRAIN_ANCHORS.map(function (p) { return [offX + p[0] * scale, offY + p[1] * scale]; });
+    var n = pts.length;
+    var path = new Path2D();
+    path.moveTo(pts[0][0], pts[0][1]);
+    for (var i = 0; i < n; i++) {
+      var p0 = pts[(i - 1 + n) % n];
+      var p1 = pts[i];
+      var p2 = pts[(i + 1) % n];
+      var p3 = pts[(i + 2) % n];
+      var c1x = p1[0] + (p2[0] - p0[0]) / 6;
+      var c1y = p1[1] + (p2[1] - p0[1]) / 6;
+      var c2x = p2[0] - (p3[0] - p1[0]) / 6;
+      var c2y = p2[1] - (p3[1] - p1[1]) / 6;
+      path.bezierCurveTo(c1x, c1y, c2x, c2y, p2[0], p2[1]);
     }
-    return false;
+    path.closePath();
+    return path;
   }
 
   // A random point in the scattered ring around the brain, used as the
   // "before assembly" and "after disintegration" resting spots.
   function scatterPoint() {
     var angle = rand(0, Math.PI * 2);
-    var radius = baseR * rand(1.25, 2.5);
+    var radius = baseR * rand(1.3, 2.6);
     return { x: cx + Math.cos(angle) * radius, y: cy + Math.sin(angle) * radius * 0.75 };
   }
 
@@ -121,17 +125,18 @@ function initNeuralBackground() {
 
     cx = width * 0.5;
     cy = height * 0.48;
-    baseR = Math.min(width, height) * 0.42;
-    linkDist = baseR * 0.16;
+    baseR = Math.min(width, height) * 0.44;
+    linkDist = baseR * 0.15;
+    brainPath = buildBrainPath(baseR, cx, cy);
 
-    var target = Math.max(60, Math.min(150, Math.round((width * height) / 7000)));
+    var target = Math.max(70, Math.min(170, Math.round((width * height) / 6500)));
     particles = [];
     var attempts = 0;
-    while (particles.length < target && attempts < target * 50) {
+    while (particles.length < target && attempts < target * 60) {
       attempts++;
-      var px = rand(cx - baseR * 1.05, cx + baseR * 1.05);
-      var py = rand(cy - baseR * 0.85, cy + baseR * 0.85);
-      if (!insideBrain(px, py)) continue;
+      var px = rand(cx - baseR, cx + baseR);
+      var py = rand(cy - baseR, cy + baseR);
+      if (!ctx.isPointInPath(brainPath, px, py)) continue;
       particles.push({
         tx: px, ty: py,
         x: px, y: py,
@@ -200,6 +205,16 @@ function initNeuralBackground() {
     }
 
     if (cohesion > 0.01) {
+      // Trace the actual brain silhouette so the shape reads clearly
+      // even where the particle cloud alone leaves gaps.
+      ctx.save();
+      ctx.strokeStyle = 'rgba(247,197,72,' + (0.22 * cohesion + 0.25 * flash).toFixed(3) + ')';
+      ctx.lineWidth = 1.4;
+      ctx.shadowColor = 'rgba(255,150,40,0.6)';
+      ctx.shadowBlur = 8 * cohesion;
+      ctx.stroke(brainPath);
+      ctx.restore();
+
       ctx.lineWidth = 1;
       for (var i = 0; i < edges.length; i++) {
         var e = edges[i];
