@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contact — IIT Dharwad Technical Council</title>
+<meta name="description" content="Join the council, pitch an event, or get in touch with the Technical Council.">
+<link rel="icon" href="images/logo.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="index.html" class="brand">
+      <img src="images/logo.jpg" alt="Technical Council mark">
+      <span class="brand-text">
+        <span class="brand-title">TECHNICAL COUNCIL</span>
+        <span class="brand-sub mono">IIT DHARWAD</span>
+      </span>
+    </a>
+    <nav class="nav-links mono" id="navLinks">
+      <a class="nav-link" href="index.html">HOME</a>
+      <a class="nav-link" href="about.html">ABOUT</a>
+      <a class="nav-link" href="team.html">TEAM</a>
+      <a class="nav-link" href="events.html">EVENTS</a>
+      <a class="nav-link" href="contact.html">CONTACT</a>
+    </nav>
+    <div class="header-actions">
+      <a href="contact.html" class="btn btn-grad btn-sm mono">JOIN THE COUNCIL →</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="navLinks">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <div class="page-header" style="max-width:760px;">
+    <div class="eyebrow mono">CONTACT</div>
+    <h1 style="font-size:48px;">Get in touch.</h1>
+    <p>Join the council, pitch an event, or just ask a question — someone reads every message within a couple of days.</p>
+  </div>
+
+  <section class="section" style="padding-top:0;">
+    <div class="form-grid">
+
+      <form id="contactForm">
+        <div class="field-row">
+          <div class="field">
+            <label for="name">FULL NAME</label>
+            <input id="name" name="name" type="text" placeholder="[Your name]" required>
+          </div>
+          <div class="field">
+            <label for="email">EMAIL</label>
+            <input id="email" name="email" type="email" placeholder="[you@iitdh.ac.in]" required>
+          </div>
+        </div>
+        <div class="field">
+          <label for="branch">BRANCH &amp; YEAR</label>
+          <input id="branch" name="branch" type="text" placeholder="[e.g. Math &amp; Computing, 2nd Year]">
+        </div>
+        <div class="field">
+          <label for="reason">WHAT'S THIS ABOUT?</label>
+          <input id="reason" name="reason" type="text" placeholder="[Joining the council, pitching an event, general question…]">
+        </div>
+        <div class="field">
+          <label for="message">MESSAGE</label>
+          <textarea id="message" name="message" rows="6" placeholder="[Tell us a bit more]" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-grad mono" style="align-self:flex-start;">SEND MESSAGE →</button>
+        <p class="form-note">This form isn't connected to anything yet — wire it up in <code>js/main.js</code>.</p>
+      </form>
+
+      <div>
+        <div class="info-card">
+          <h4>REACH US DIRECTLY</h4>
+          <div class="info-row"><div class="label">Email</div><div class="value">[technicalcouncil@iitdh.ac.in]</div></div>
+          <div class="info-row"><div class="label">Campus</div><div class="value">[CAMPUS ADDRESS], Dharwad, Karnataka</div></div>
+          <div class="info-row"><div class="label">Office hours</div><div class="value">[DAYS], [TIME] — [ROOM/BUILDING]</div></div>
+        </div>
+        <div class="info-card">
+          <h4>FOLLOW ALONG</h4>
+          <div class="social-list">
+            <a href="#">GitHub <span>→</span></a>
+            <a href="#">LinkedIn <span>→</span></a>
+            <a href="#">Instagram <span>→</span></a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand">
+        <img src="images/logo.jpg" alt="">
+        <span>TECHNICAL COUNCIL</span>
+      </div>
+      <p class="footer-desc">The student body driving technical culture at IIT Dharwad — workshops, hackathons and the projects that come out of them.</p>
+    </div>
+    <div class="footer-col">
+      <span class="footer-col-title">SITE</span>
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="team.html">Team</a>
+      <a href="events.html">Events</a>
+      <a href="contact.html">Contact</a>
+    </div>
+    <div class="footer-col">
+      <span class="footer-col-title">RESOURCES</span>
+      <a href="#">[Handbook]</a>
+      <a href="#">[Constitution]</a>
+      <a href="#">[Newsletter]</a>
+    </div>
+    <div class="footer-col">
+      <span class="footer-col-title">CONTACT</span>
+      <span>[technicalcouncil@iitdh.ac.in]</span>
+      <span>[CAMPUS ADDRESS], Dharwad, Karnataka</span>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2026 IIT DHARWAD TECHNICAL COUNCIL</span>
+    <div class="footer-social">
+      <a href="#">GITHUB</a>
+      <a href="#">LINKEDIN</a>
+      <a href="#">INSTAGRAM</a>
+    </div>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>
