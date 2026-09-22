@@ -70,7 +70,11 @@ img{ max-width: 100%; display:block; }
 }
 
 .brand{ display:flex; align-items:center; gap:14px; flex-shrink:0; }
-.brand img{ width:40px; height:40px; object-fit:contain; border-radius:8px; }
+.brand img{
+  width:40px; height:40px; object-fit:cover; border-radius:50%;
+  mix-blend-mode:screen;
+  box-shadow:0 0 0 1px rgba(242,101,12,0.4), 0 0 18px rgba(242,101,12,0.2);
+}
 .brand-text{ display:flex; flex-direction:column; line-height:1.15; }
 .brand-title{ font-weight:700; font-size:16px; letter-spacing:-0.01em; }
 .brand-sub{ font-size:10px; letter-spacing:0.18em; color: var(--ink-dim); }
@@ -182,8 +186,20 @@ img{ max-width: 100%; display:block; }
   top: 120px;
   width:300px;
   height:300px;
-  object-fit:contain;
-  filter: drop-shadow(0 0 80px rgba(242,101,12,0.25));
+  object-fit:cover;
+  border-radius:50%;
+  mix-blend-mode:screen;
+  box-shadow:0 0 0 1px rgba(242,101,12,0.4), 0 0 90px rgba(242,101,12,0.35);
+}
+
+#neuralBg{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  z-index:-1;
+  pointer-events:none;
+  display:block;
 }
 .page-header{ padding: 88px var(--pad-x) 56px; max-width:900px; }
 .page-header h1{ font-size:52px; line-height:1.1; font-weight:700; letter-spacing:-0.02em; margin:0 0 24px; }
@@ -422,7 +438,11 @@ input:focus, textarea:focus{ outline:2px solid var(--orange); outline-offset:1px
 .site-footer{ padding: 72px var(--pad-x) 40px; border-top:1px solid var(--line); }
 .footer-grid{ display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:40px; margin-bottom:56px; }
 .footer-brand{ display:flex; align-items:center; gap:12px; margin-bottom:16px; }
-.footer-brand img{ width:32px; height:32px; object-fit:contain; border-radius:6px; }
+.footer-brand img{
+  width:32px; height:32px; object-fit:cover; border-radius:50%;
+  mix-blend-mode:screen;
+  box-shadow:0 0 0 1px rgba(242,101,12,0.35);
+}
 .footer-brand span{ font-family:'Space Grotesk'; font-weight:700; font-size:15px; }
 .footer-desc{ font-size:13px; line-height:1.7; color:var(--ink-dim); max-width:280px; margin:0; }
 .footer-col{ display:flex; flex-direction:column; gap:12px; }
